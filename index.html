@@ -3,112 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greenville Cash - Secure Local Banking</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <title>Your GitHub Site</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <header>
         <div class="container">
-            <div class="logo">
-                <h1>Greenville Cash</h1>
-            </div>
+            <h1>Your Name</h1>
+            <p>Web Developer | Designer | Creator</p>
             <nav>
                 <ul>
-                    <li><a href="index.html" class="active">Home</a></li>
-                    <li><a href="login.html">Login</a></li>
-                    <li><a href="signup.html" class="btn-primary">Sign Up</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <section class="hero">
+    <section id="hero">
         <div class="container">
-            <div class="hero-content">
-                <h2>Secure, Local, and Community-Focused</h2>
-                <p>Greenville Cash helps you manage your finances with military-grade encryption, right in your browser.</p>
-                <a href="signup.html" class="btn-primary btn-large">Get Started</a>
-            </div>
-            <div class="hero-image">
-                <img src="/api/placeholder/500/300" alt="Financial security illustration">
-            </div>
+            <h2>Welcome to My Portfolio</h2>
+            <p>I build amazing web experiences</p>
+            <a href="#contact" class="btn">Get in Touch</a>
         </div>
     </section>
 
-    <section class="features">
+    <section id="about">
         <div class="container">
-            <h2>Why Choose Greenville Cash?</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>End-to-End Encryption</h3>
-                    <p>Your financial data never leaves your device unencrypted.</p>
+            <h2>About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Hello! I'm a passionate developer with expertise in web technologies. I love creating responsive, user-friendly websites and applications.</p>
+                    <p>My skills include HTML, CSS, JavaScript, and various frameworks. I'm constantly learning and exploring new technologies to improve my craft.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🏦</div>
-                    <h3>Local Storage</h3>
-                    <p>No central database to hack - your data stays with you.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🌱</div>
-                    <h3>Community Focus</h3>
-                    <p>Built for the Greenville community, by the Greenville community.</p>
+                <div class="skills">
+                    <h3>My Skills</h3>
+                    <ul>
+                        <li>HTML5 & CSS3</li>
+                        <li>JavaScript</li>
+                        <li>React</li>
+                        <li>Node.js</li>
+                        <li>Git & GitHub</li>
+                        <li>Responsive Design</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="how-it-works">
+    <section id="projects">
         <div class="container">
-            <h2>How It Works</h2>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Create an Account</h3>
-                    <p>Sign up with a secure password that's used to encrypt your data.</p>
+            <h2>My Projects</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <h3>Project One</h3>
+                    <p>A responsive website built with HTML, CSS, and JavaScript.</p>
+                    <div class="project-links">
+                        <a href="#" class="btn small">View Live</a>
+                        <a href="#" class="btn small">Source Code</a>
+                    </div>
                 </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Add Your Details</h3>
-                    <p>Enter your financial information securely in your dashboard.</p>
+                <div class="project-card">
+                    <h3>Project Two</h3>
+                    <p>An interactive web application using React and Node.js.</p>
+                    <div class="project-links">
+                        <a href="#" class="btn small">View Live</a>
+                        <a href="#" class="btn small">Source Code</a>
+                    </div>
                 </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Access Anywhere</h3>
-                    <p>Your encrypted data is available on any device you log in from.</p>
+                <div class="project-card">
+                    <h3>Project Three</h3>
+                    <p>A mobile-first design for a local business.</p>
+                    <div class="project-links">
+                        <a href="#" class="btn small">View Live</a>
+                        <a href="#" class="btn small">Source Code</a>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2>Get in Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <p><i class="fas fa-envelope"></i> email@example.com</p>
+                    <p><i class="fab fa-github"></i> github.com/yourusername</p>
+                    <p><i class="fab fa-linkedin"></i> linkedin.com/in/yourprofile</p>
+                </div>
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
             </div>
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <h2>Greenville Cash</h2>
-                    <p>Secure. Local. Yours.</p>
-                </div>
-                <div class="footer-links">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="login.html">Login</a></li>
-                        <li><a href="signup.html">Sign Up</a></li>
-                    </ul>
-                </div>
-                <div class="footer-contact">
-                    <h3>Contact</h3>
-                    <p>support@greenvillecash.com</p>
-                    <p>Greenville, SC</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Greenville Cash. All rights reserved.</p>
+            <p>&copy; 2025 Your Name. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
             </div>
         </div>
     </footer>
 
-    <script src="scripts.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
