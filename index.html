@@ -1,1 +1,35 @@
-Testing
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Random Button</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+    button {
+      padding: 20px 40px;
+      font-size: 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Click the Button!</h1>
+  <button onclick="changeColor()">Click me</button>
+
+  <script>
+    function changeColor() {
+      const button = document.querySelector("button");
+      const randomColor = "#" + Math.floor(Math.random()*16777215).toString(16);
+      button.style.background = randomColor;
+    }
+  </script>
+
+</body>
+</html>
