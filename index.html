@@ -294,8 +294,8 @@
         <div class="logo">
             <i class="fas fa-money-bill-wave"></i>
         </div>
-        <h1>Updates coming to <span class="highlight">Greenville Cash</span>!</h1>
-        <p>Greenville automated autofarm coming soon!</p>
+        <h1>Welcome to <span class="highlight">Greenville Cash</span>!</h1>
+        <p>Greenville automated autofarm is now available!</p>
         
         <div class="auth-container">
             <div class="form-container">
@@ -306,38 +306,38 @@
                 
                 <form class="auth-form active" id="signup-form">
                     <div class="info-message">
-                        Sign-ups are temporarily disabled. Please check back soon!
+                        Sign up now to start earning with Greenville Cash!
                     </div>
                     <div class="form-group">
                         <label for="signup-name">Your Name</label>
-                        <input type="text" id="signup-name" placeholder="Enter your name" required disabled>
+                        <input type="text" id="signup-name" placeholder="Enter your name" required>
                     </div>
                     <div class="form-group">
                         <label for="signup-email">Email Address</label>
-                        <input type="email" id="signup-email" placeholder="Enter your email" required disabled>
+                        <input type="email" id="signup-email" placeholder="Enter your email" required>
                     </div>
                     <div class="form-group">
                         <label for="signup-password">Password</label>
-                        <input type="password" id="signup-password" placeholder="Create a password" required minlength="6" disabled>
+                        <input type="password" id="signup-password" placeholder="Create a password" required minlength="6">
                     </div>
-                    <button type="submit" class="auth-btn" disabled>Sign Up for Updates</button>
+                    <button type="submit" class="auth-btn">Sign Up Now</button>
                     <div class="error-message" id="signup-error"></div>
                     <div class="success-message" id="signup-success"></div>
                 </form>
                 
                 <form class="auth-form" id="login-form">
                     <div class="info-message">
-                        Login is temporarily disabled. Please check back soon!
+                        Welcome back! Login to access your dashboard.
                     </div>
                     <div class="form-group">
                         <label for="login-email">Email Address</label>
-                        <input type="email" id="login-email" placeholder="Enter your email" required disabled>
+                        <input type="email" id="login-email" placeholder="Enter your email" required>
                     </div>
                     <div class="form-group">
                         <label for="login-password">Password</label>
-                        <input type="password" id="login-password" placeholder="Enter your password" required disabled>
+                        <input type="password" id="login-password" placeholder="Enter your password" required>
                     </div>
-                    <button type="submit" class="auth-btn" disabled>Login</button>
+                    <button type="submit" class="auth-btn">Login</button>
                     <div class="error-message" id="login-error"></div>
                     <div class="success-message" id="login-success"></div>
                 </form>
@@ -373,16 +373,108 @@
         // Auth state observer
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // User is signed in
-                console.log("User is signed in:", user.uid);
-                // You can redirect to a members-only page or show member content
-            } else {
-                // User is signed out
-                console.log("User is signed out");
+                // User is signed in - redirect to dashboard
+                window.location.href = "dashboard.html";
             }
         });
 
-        // Form submission handlers are kept but won't be triggered due to disabled buttons
+        // Sign up form submission handler
+        document.getElementById("signup-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const nameInput = document.getElementById("signup-name");
+            const emailInput = document.getElementById("signup-email");
+            const passwordInput = document.getElementById("signup-password");
+            const errorElement = document.getElementById("signup-error");
+            const successElement = document.getElementById("signup-success");
+            
+            // Reset messages
+            errorElement.style.display = "none";
+            successElement.style.display = "none";
+            
+            // Disable the button during signup
+            const submitButton = e.target.querySelector("button[type=submit]");
+            submitButton.disabled = true;
+            submitButton.textContent = "Signing Up...";
+            
+            try {
+                // Create user with Firebase Auth
+                const userCredential = await createUserWithEmailAndPassword(
+                    auth, 
+                    emailInput.value, 
+                    passwordInput.value
+                );
+                
+                // Get the user
+                const user = userCredential.user;
+                
+                // Store additional user data in Firestore
+                await setDoc(doc(db, "users", user.uid), {
+                    name: nameInput.value,
+                    email: emailInput.value,
+                    createdAt: new Date().toISOString(),
+                    balance: 0,
+                    farms: 0
+                });
+                
+                // Show success message
+                successElement.textContent = "Account created successfully! Redirecting to dashboard...";
+                successElement.style.display = "block";
+                
+                // Will be redirected by onAuthStateChanged
+            } catch (error) {
+                // Handle errors
+                console.error("Error during signup:", error);
+                errorElement.textContent = error.message;
+                errorElement.style.display = "block";
+                
+                // Re-enable the button
+                submitButton.disabled = false;
+                submitButton.textContent = "Sign Up Now";
+            }
+        });
+        
+        // Login form submission handler
+        document.getElementById("login-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const emailInput = document.getElementById("login-email");
+            const passwordInput = document.getElementById("login-password");
+            const errorElement = document.getElementById("login-error");
+            const successElement = document.getElementById("login-success");
+            
+            // Reset messages
+            errorElement.style.display = "none";
+            successElement.style.display = "none";
+            
+            // Disable the button during login
+            const submitButton = e.target.querySelector("button[type=submit]");
+            submitButton.disabled = true;
+            submitButton.textContent = "Logging In...";
+            
+            try {
+                await signInWithEmailAndPassword(
+                    auth, 
+                    emailInput.value, 
+                    passwordInput.value
+                );
+                
+                // Show success message
+                successElement.textContent = "Login successful! Redirecting to dashboard...";
+                successElement.style.display = "block";
+                
+                // Will be redirected by onAuthStateChanged
+            } catch (error) {
+                // Handle errors
+                console.error("Error during login:", error);
+                errorElement.textContent = error.message;
+                errorElement.style.display = "block";
+                
+                // Re-enable the button
+                submitButton.disabled = false;
+                submitButton.textContent = "Login";
+            }
+        });
         
         // Tab switching functionality
         document.getElementById("signup-tab").addEventListener("click", () => {
