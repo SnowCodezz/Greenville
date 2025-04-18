@@ -309,6 +309,10 @@
                         Sign up now to start earning with Greenville Cash!
                     </div>
                     <div class="form-group">
+                        <label for="signup-username">Username</label>
+                        <input type="text" id="signup-username" placeholder="Enter your username" required>
+                    </div>
+                    <div class="form-group">
                         <label for="signup-email">Email Address</label>
                         <input type="email" id="signup-email" placeholder="Enter your email" required>
                     </div>
@@ -356,7 +360,7 @@
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         // Get the Firebase configuration from window object
         const firebaseConfig = window.firebaseConfig;
@@ -378,6 +382,7 @@
         document.getElementById("signup-form").addEventListener("submit", async (e) => {
             e.preventDefault();
             
+            const usernameInput = document.getElementById("signup-username");
             const emailInput = document.getElementById("signup-email");
             const passwordInput = document.getElementById("signup-password");
             const errorElement = document.getElementById("signup-error");
@@ -393,6 +398,23 @@
             submitButton.textContent = "Signing Up...";
             
             try {
+                // Check if username already exists
+                const username = usernameInput.value.trim();
+                
+                // Validate username (only alphanumeric characters)
+                if (!/^[a-zA-Z0-9]+$/.test(username)) {
+                    throw new Error("Username can only contain letters and numbers");
+                }
+                
+                // Check for username uniqueness
+                const usersRef = collection(db, "users");
+                const usernameQuery = query(usersRef, where("username", "==", username));
+                const usernameSnapshot = await getDocs(usernameQuery);
+                
+                if (!usernameSnapshot.empty) {
+                    throw new Error("Username already taken. Please choose another one.");
+                }
+                
                 // Create user with Firebase Auth
                 const userCredential = await createUserWithEmailAndPassword(
                     auth, 
@@ -405,7 +427,7 @@
                 
                 // Store additional user data in Firestore
                 await setDoc(doc(db, "users", user.uid), {
-                    username: user.uid,
+                    username: username,
                     email: emailInput.value,
                     createdAt: new Date().toISOString(),
                     balance: 0,
