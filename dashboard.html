@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenville Cash - Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #2ecc71 0%, #1a5928 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .user-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-welcome {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .username {
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            padding: 2rem;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: #f8f8f8;
+            color: #2ecc71;
+        }
+
+        .nav-link.active {
+            background-color: #edfff3;
+            font-weight: 600;
+        }
+
+        .nav-link i {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-title {
+            color: #777;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            color: #2ecc71;
+            background-color: #edfff3;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .stat-description {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        /* Farms Section */
+        .farms-section, .transactions-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .add-farm-btn {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .add-farm-btn:hover {
+            background-color: #25a25a;
+        }
+
+        /* Farm Cards */
+        .farms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .farm-card {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            border: 1px solid #eee;
+            transition: all 0.3s;
+        }
+
+        .farm-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transform: translateY(-3px);
+        }
+
+        .farm-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .farm-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .farm-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            color: #2ecc71;
+        }
+
+        .farm-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .farm-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .farm-detail-label {
+            opacity: 0.8;
+        }
+
+        .farm-detail-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .farm-progress {
+            width: 100%;
+            height: 8px;
+            background-color: #e9e9e9;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #2ecc71;
+            border-radius: 10px;
+        }
+
+        .farm-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .farm-btn {
+            flex: 1;
+            padding: 0.6rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .upgrade-btn {
+            background-color: #f5f9ff;
+            color: #3498db;
+            border: 1px solid #3498db;
+        }
+
+        .upgrade-btn:hover {
+            background-color: #e6f0fc;
+        }
+
+        .collect-btn {
+            background-color: #edfff3;
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+
+        .collect-btn:hover {
+            background-color: #daffea;
+        }
+
+        /* No Farms Message */
+        .no-farms-message {
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+            font-size: 1.1rem;
+        }
+
+        .no-farms-message i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid #2ecc71;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Transactions Section */
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transactions-table th, .transactions-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .transactions-table th {
+            font-weight: 600;
+            color: #555;
+            background-color: #f9f9f9;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+        }
+
+        .amount-positive {
+            color: #2ecc71;
+        }
+
+        .amount-negative {
+            color: #e74c3c;
+        }
+
+        .transaction-status {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-completed {
+            background-color: #edfff3;
+            color: #2ecc71;
+        }
+
+        .status-pending {
+            background-color: #fff9e6;
+            color: #f39c12;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #f8f8f8;
+            color: #777;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+                padding: 1.5rem;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .nav-menu {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .nav-item {
+                margin-bottom: 0;
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .farms-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .user-nav {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <i class="fas fa-money-bill-wave logo-icon"></i>
+            <h1 class="logo-text">Greenville Cash</h1>
+        </div>
+        <div class="user-nav">
+            <p class="user-welcome">Welcome, <span class="username" id="user-name">User</span>!</p>
+            <button class="logout-btn" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <aside class="sidebar">
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-tractor"></i> My Farms
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-exchange-alt"></i> Transactions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-gift"></i> Rewards
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-users"></i> Referrals
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="dashboard-content">
+            <section class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3 class="stat-title">Current Balance</h3>
+                        <div class="stat-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="balance-value">$0.00</div>
+                    <p class="stat-description">Available for withdrawal</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3 class="stat-title">Active Farms</h3>
+                        <div class="stat-icon">
+                            <i class="fas fa-tractor"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="farms-value">0</div>
+                    <p class="stat-description">Generating income</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3 class="stat-title">Daily Income</h3>
+                        <div class="stat-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="daily-income">$0.00</div>
+                    <p class="stat-description">Estimated daily earnings</p>
+                </div>
+            </section>
+
+            <section class="farms-section">
+                <div class="section-header">
+                    <h2 class="section-title">Your Farms</h2>
+                    <button class="add-farm-btn" id="add-farm-btn">
+                        <i class="fas fa-plus"></i> Add New Farm
+                    </button>
+                </div>
+                <div id="farms-container" class="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            </section>
+
+            <section class="transactions-section">
+                <div class="section-header">
+                    <h2 class="section-title">Recent Transactions</h2>
+                </div>
+                <div id="transactions-container" class="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Greenville Cash. All rights reserved.</p>
+    </footer>
+
+    <!-- Load Firebase configuration file first -->
+    <script src="firebase-config.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, getDocs, updateDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+        // Get the Firebase configuration from window object
+        const firebaseConfig = window.firebaseConfig;
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Elements
+        const userNameElement = document.getElementById('user-name');
+        const balanceValueElement = document.getElementById('balance-value');
+        const farmsValueElement = document.getElementById('farms-value');
+        const dailyIncomeElement = document.getElementById('daily-income');
+        const farmsContainer = document.getElementById('farms-container');
+        const transactionsContainer = document.getElementById('transactions-container');
+        const logoutButton = document.getElementById('logout-btn');
+        const addFarmButton = document.getElementById('add-farm-btn');
+
+        // Check authentication state
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User is signed in, load dashboard data
+                try {
+                    await loadUserData(user.uid);
+                    await loadFarms(user.uid);
+                    await loadTransactions(user.uid);
+                } catch (error) {
+                    console.error("Error loading dashboard data:", error);
+                }
+            } else {
+                // User is signed out, redirect to login page
+                window.location.href = "index.html";
+            }
+        });
+
+        // Load user data
+        async function loadUserData(userId) {
+            try {
+                const userRef = doc(db, "users", userId);
+                const userSnap = await getDoc(userRef);
+                
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    
+                    // Update user name display
+                    userNameElement.textContent = userData.name;
+                    
+                    // Update balance display
+                    balanceValueElement.textContent = `$${userData.balance.toFixed(2)}`;
+                    
+                    // Update farms count
+                    farmsValueElement.textContent = userData.farms || 0;
+                    
+                    // Calculate estimated daily income (example calculation)
+                    const dailyIncome = (userData.farms || 0) * 2.50; // $2.50 per farm per day
+                    dailyIncomeElement.textContent = `$${dailyIncome.toFixed(2)}`;
+                } else {
+                    console.error("No user data found!");
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        }
+
+        // Load farms
+        async function loadFarms(userId) {
+            try {
+                const farmsQuery = query(collection(db, "users", userId, "farms"));
+                const farmsSnapshot = await getDocs(farmsQuery);
+                
+                // Remove loading spinner
+                farmsContainer.classList.remove("loading");
+                farmsContainer.innerHTML = '';
+                
+                if (farmsSnapshot.empty) {
+                    // No farms found
+                    farmsContainer.innerHTML = `
+                        <div class="no-farms-message">
+                            <i class="fas fa-seedling"></i>
+                            <p>You don't have any farms yet. Create your first farm to start earning!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Create farms grid
+                const farmsGrid = document.createElement('div');
+                farmsGrid.className = 'farms-grid';
+                
+                farmsSnapshot.forEach(farmDoc => {
+                    const farm = farmDoc.data();
+                    const farmId = farmDoc.id;
+                    
+                    // Calculate progress percentage
+                    const progressPercentage = calculateProgress(farm.lastHarvest);
+                    
+                    // Create farm card
+                    const farmCard = document.createElement('div');
+                    farmCard.className = 'farm-card';
+                    farmCard.innerHTML = `
+                        <div class="farm-header">
+                            <h3 class="farm-name">${farm.name || 'Farm #' + farmId.substring(0, 5)}</h3>
+                            <div class="farm-status status-active">
+                                <i class="fas fa-circle"></i> Active
+                            </div>
+                        </div>
+                        <div class="farm-details">
+                            <div class="farm-detail">
+                                <span class="farm-detail-label">Type:</span>
+                                <span class="farm-detail-value">${farm.type || 'Standard'}</span>
+                            </div>
+                            <div class="farm-detail">
+                                <span class="farm-detail-label">Earnings:</span>
+                                <span class="farm-detail-value">$${farm.earningsPerDay.toFixed(2)}/day</span>
+                            </div>
+                            <div class="farm-detail">
+                                <span class="farm-detail-label">Ready to harvest:</span>
+                                <span class="farm-detail-value">$${calculateEarnings(farm.lastHarvest, farm.earningsPerDay).toFixed(2)}</span>
+                            </div>
+                            <div class="farm-progress">
+                                <div class="progress-bar" style="width: ${progressPercentage}%"></div>
+                            </div>
+                        </div>
+                        <div class="farm-actions">
+                            <button class="farm-btn upgrade-btn" data-farm-id="${farmId}">
+                                <i class="fas fa-arrow-up"></i> Upgrade
+                            </button>
+                            <button class="farm-btn collect-btn" data-farm-id="${farmId}">
+                                <i class="fas fa-hand-holding-usd"></i> Collect
+                            </button>
+                        </div>
+                    `;
+                    
+                    farmsGrid.appendChild(farmCard);
+                });
+                
+                farmsContainer.appendChild(farmsGrid);
+                
+                // Add event listeners to farm buttons
+                document.querySelectorAll('.collect-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const farmId = e.currentTarget.getAttribute('data-farm-id');
+                        harvestFarm(userId, farmId);
+                    });
+                });
+                
+                document.querySelectorAll('.upgrade-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const farmId = e.currentTarget.getAttribute('data-farm-id');
+                        upgradeFarm(userId, farmId);
+                    });
+                });
+                
+            } catch (error) {
+                console.error("Error fetching farms:", error);
+                farmsContainer.classList.remove("loading");
+                farmsContainer.innerHTML = `<p>Error loading farms: ${error.message}</p>`;
+            }
+        }
+
+        // Load transactions
+        async function loadTransactions(userId) {
+            try {
+                const transactionsQuery = query(
+                    collection(db, "users", userId, "transactions"),
+                    orderBy("timestamp", "desc"),
+                    limit(5)
+                );
+                const transactionsSnapshot = await getDocs(transactionsQuery);
+                
+                // Remove loading spinner
+                transactionsContainer.classList.remove("loading");
+                transactionsContainer.innerHTML = '';
+                
+                if (transactionsSnapshot.empty) {
+                    // No transactions found
+                    transactionsContainer.innerHTML = `
+                        <p style="text-align: center; padding: 1rem; color: #777;">
+                            No transactions yet.
+                        </p>
+                    `;
+                    return;
+                }
+                
+                // Create transactions table
+                const table = document.createElement('table');
+                table.className = 'transactions-table';
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                `;
+                
+                const tbody = table.querySelector('tbody');
+                
+                transactionsSnapshot.forEach(transactionDoc => {
+                    const transaction = transactionDoc.data();
+                    const date = new Date(transaction.timestamp);
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${date.toLocaleDateString()}</td>
+                        <td>${transaction.description}</td>
+                        <td class="transaction-amount ${transaction.amount > 0 ? 'amount-positive' : 'amount-negative'}">
+                            ${transaction.amount > 0 ? '+' : ''}$${Math.abs(transaction.amount).toFixed(2)}
+                        </td>
+                        <td>
+                            <span class="transaction-status status-${transaction.status.toLowerCase()}">
+                                ${transaction.status}
+                            </span>
+                        </td>
+                    `;
+                    
+                    tbody.appendChild(tr);
+                });
+                
+                transactionsContainer.appendChild(table);
+                
+            } catch (error) {
+                console.error("Error fetching transactions:", error);
+                transactionsContainer.classList.remove("loading");
+                transactionsContainer.innerHTML = `<p>Error loading transactions: ${error.message}</p>`;
+            }
+        }
+
+        // Add a new farm
+        async function addNewFarm(userId) {
+            try {
+                const userRef = doc(db, "users", userId);
+                const userSnap = await getDoc(userRef);
+                
+                if (!userSnap.exists()) {
+                    throw new Error("User not found!");
+                }
+                
+                const userData = userSnap.data();
+                
+                // Create a new farm
+                const farmData = {
+                    name: `Farm #${(userData.farms || 0) + 1}`,
+                    type: "Standard",
+                    level: 1,
+                    earningsPerDay: 2.50, // $2.50 per day for standard farm
+                    lastHarvest: new Date().toISOString(),
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Add farm to Firestore
+                await addDoc(collection(db, "users", userId, "farms"), farmData);
+                
+                // Update user's farm count
+                await updateDoc(userRef, {
+                    farms: (userData.farms || 0) + 1
+                });
+                
+                // Add transaction record
+                await addDoc(collection(db, "users", userId, "transactions"), {
+                    description: "New Farm Purchase",
+                    amount: -20.00, // Cost to buy a new farm
+                    timestamp: new Date().toISOString(),
+                    status: "Completed"
+                });
+                
+                // Reload dashboard data
+                await loadUserData(userId);
+                await loadFarms(userId);
+                await loadTransactions(userId);
+                
+            } catch (error) {
+                console.error("Error adding new farm:", error);
+                alert("Error adding new farm: " + error.message);
+            }
+        }
+
+        // Harvest a farm
+        async function harvestFarm(userId, farmId) {
+            try {
+                // Get farm data
+                const farmRef = doc(db, "users", userId, "farms", farmId);
+                const farmSnap = await getDoc(farmRef);
+                
+                if (!farmSnap.exists()) {
+                    throw new Error("Farm not found!");
+                }
+                
+                const farmData = farmSnap.data();
+                
+                // Calculate earnings
+                const earnings = calculateEarnings(farmData.lastHarvest, farmData.earningsPerDay);
+                
+                if (earnings <= 0) {
+                    alert("Nothing to harvest yet!");
+                    return;
+                }
+                
+                // Update user's balance
+                const userRef = doc(db, "users", userId);
+                const userSnap = await getDoc(userRef);
+                
+                if (!userSnap.exists()) {
+                    throw new Error("User not found!");
+                }
+                
+                const userData = userSnap.data();
+                const newBalance = (userData.balance || 0) + earnings;
+                
+                await updateDoc(userRef, {
+                    balance: newBalance
+                });
+                
+                // Update farm's last harvest time
+                await updateDoc(farmRef, {
+                    lastHarvest: new Date().toISOString()
+                });
+                
+                // Add transaction record
+                await addDoc(collection(db, "users", userId, "transactions"), {
+                    description: `Harvest from ${farmData.name || 'Farm #' + farmId.substring(0, 5)}`,
+                    amount: earnings,
+                    timestamp: new Date().toISOString(),
+                    status: "Completed"
+                });
+                
+                // Reload dashboard data
+                await loadUserData(userId);
+                await loadFarms(userId);
+                await loadTransactions(userId);
+                
+                alert(`Successfully harvested $${earnings.toFixed(2)} from your farm!`);
+                
+            } catch (error) {
+                console.error("Error harvesting farm:", error);
+                alert("Error harvesting farm: " + error.message);
+            }
+        }
+
+        // Upgrade a farm
+        async function upgradeFarm(userId, farmId) {
+            try {
+                // Get farm data
+                const farmRef = doc(db, "users", userId, "farms", farmId);
+                const farmSnap = await getDoc(farmRef);
+                
+                if (!farmSnap.exists()) {
+                    throw new Error("Farm not found!");
+                }
+                
+                const farmData = farmSnap.data();
+                const currentLevel = farmData.level || 1;
+                const upgradeCost = calculateUpgradeCost(currentLevel);
+                
+                // Get user data to check balance
+                const userRef = doc(db, "users", userId);
+                const userSnap = await getDoc(userRef);
+                
+                if (!userSnap.exists()) {
+                    throw new Error("User not found!");
+                }
+                
+                const userData = userSnap.data();
+                
+                if ((userData.balance || 0) < upgradeCost) {
+                    alert(`Not enough balance for upgrade! Cost: $${upgradeCost.toFixed(2)}`);
+                    return;
+                }
+                
+                // Calculate new earnings rate (25% increase per level)
+                const baseEarnings = 2.50; // Base earnings for level 1
+                const newEarningsPerDay = baseEarnings * Math.pow(1.25, currentLevel);
+                
+                // Update farm level and earnings
+                await updateDoc(farmRef, {
+                    level: currentLevel + 1,
+                    earningsPerDay: newEarningsPerDay,
+                    type: getTypeForLevel(currentLevel + 1)
+                });
+                
+                // Update user's balance
+                const newBalance = userData.balance - upgradeCost;
+                await updateDoc(userRef, {
+                    balance: newBalance
+                });
+                
+                // Add transaction record
+                await addDoc(collection(db, "users", userId, "transactions"), {
+                    description: `Upgrade ${farmData.name || 'Farm #' + farmId.substring(0, 5)} to Level ${currentLevel + 1}`,
+                    amount: -upgradeCost,
+                    timestamp: new Date().toISOString(),
+                    status: "Completed"
+                });
+                
+                // Reload dashboard data
+                await loadUserData(userId);
+                await loadFarms(userId);
+                await loadTransactions(userId);
+                
+                alert(`Farm upgraded to Level ${currentLevel + 1}!`);
+                
+            } catch (error) {
+                console.error("Error upgrading farm:", error);
+                alert("Error upgrading farm: " + error.message);
+            }
+        }
+
+        // Helper functions
+        function calculateEarnings(lastHarvestStr, earningsPerDay) {
+            const lastHarvest = new Date(lastHarvestStr);
+            const now = new Date();
+            const diffInMs = now - lastHarvest;
+            const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+            return earningsPerDay * diffInDays;
+        }
+
+        function calculateProgress(lastHarvestStr) {
+            const lastHarvest = new Date(lastHarvestStr);
+            const now = new Date();
+            const diffInMs = now - lastHarvest;
+            const diffInHours = diffInMs / (1000 * 60 * 60);
+            // Progress is based on 24 hours cycle
+            return Math.min(100, (diffInHours / 24) * 100);
+        }
+
+        function calculateUpgradeCost(currentLevel) {
+            // Base cost is $50, doubles for each level
+            return 50 * Math.pow(2, currentLevel - 1);
+        }
+
+        function getTypeForLevel(level) {
+            if (level <= 2) return "Standard";
+            if (level <= 4) return "Premium";
+            if (level <= 6) return "Elite";
+            return "Legendary";
+        }
+
+        // Event listeners
+        logoutButton.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                // Redirect will happen automatically via onAuthStateChanged
+            } catch (error) {
+                console.error("Error signing out:", error);
+            }
+        });
+
+        addFarmButton.addEventListener('click', () => {
+            addNewFarm(auth.currentUser.uid);
+        });
+
+        // Initialize sample data for new users
+        async function initializeUserIfNeeded(userId) {
+            try {
+                const userRef = doc(db, "users", userId);
+                const userSnap = await getDoc(userRef);
+                
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    
+                    // If user has no farms yet, give them a starter farm
+                    if (!userData.farms || userData.farms === 0) {
+                        // Add starter farm
+                        await addDoc(collection(db, "users", userId, "farms"), {
+                            name: "Starter Farm",
+                            type: "Standard",
+                            level: 1,
+                            earningsPerDay: 2.50,
+                            lastHarvest: new Date().toISOString(),
+                            createdAt: new Date().toISOString()
+                        });
+                        
+                        // Update user's farm count
+                        await updateDoc(userRef, {
+                            farms: 1
+                        });
+                        
+                        // Add welcome bonus transaction
+                        await addDoc(collection(db, "users", userId, "transactions"), {
+                            description: "Welcome Bonus",
+                            amount: 50.00,
+                            timestamp: new Date().toISOString(),
+                            status: "Completed"
+                        });
+                        
+                        // Update user's balance
+                        await updateDoc(userRef, {
+                            balance: 50.00
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error("Error initializing user:", error);
+            }
+        }
+
+        // Check if user is new and initialize data
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                await initializeUserIfNeeded(user.uid);
+            }
+        });
+    </script>
+</body>
+</html>
