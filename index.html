@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greenville Cash - Coming Soon</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LcQGh0rAAAAAORFc94Fl6vREj3ovPZUqCYbvWyf"></script>
     <style>
         * {
             margin: 0;
@@ -244,13 +243,6 @@
             display: block;
         }
 
-        .captcha-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-        }
-        
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -317,8 +309,8 @@
                         Sign up now to start earning with Greenville Cash!
                     </div>
                     <div class="form-group">
-                        <label for="signup-username">Username</label>
-                        <input type="text" id="signup-username" placeholder="Choose a username" required>
+                        <label for="signup-name">Your Name</label>
+                        <input type="text" id="signup-name" placeholder="Enter your name" required>
                     </div>
                     <div class="form-group">
                         <label for="signup-email">Email Address</label>
@@ -390,7 +382,7 @@
         document.getElementById("signup-form").addEventListener("submit", async (e) => {
             e.preventDefault();
             
-            const usernameInput = document.getElementById("signup-username");
+            const nameInput = document.getElementById("signup-name");
             const emailInput = document.getElementById("signup-email");
             const passwordInput = document.getElementById("signup-password");
             const errorElement = document.getElementById("signup-error");
@@ -399,22 +391,6 @@
             // Reset messages
             errorElement.style.display = "none";
             successElement.style.display = "none";
-            
-            // Verify reCAPTCHA
-            const recaptchaResponse = grecaptcha.getResponse(1); // Use index 1 for login form
-            if (!recaptchaResponse) {
-                errorElement.textContent = "Please complete the reCAPTCHA verification";
-                errorElement.style.display = "block";
-                return;
-            }
-            
-            // Verify reCAPTCHA
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (!recaptchaResponse) {
-                errorElement.textContent = "Please complete the reCAPTCHA verification";
-                errorElement.style.display = "block";
-                return;
-            }
             
             // Disable the button during signup
             const submitButton = e.target.querySelector("button[type=submit]");
@@ -434,7 +410,7 @@
                 
                 // Store additional user data in Firestore
                 await setDoc(doc(db, "users", user.uid), {
-                    username: usernameInput.value,
+                    name: nameInput.value,
                     email: emailInput.value,
                     createdAt: new Date().toISOString(),
                     balance: 0,
@@ -446,14 +422,6 @@
                 successElement.style.display = "block";
                 
                 // Will be redirected by onAuthStateChanged
-                // Disable the button during login
-                const submitButton = e.target.querySelector("button[type=submit]");
-                submitButton.disabled = true;
-                submitButton.textContent = "Logging In...";
-                // Disable the button during signup
-                const submitButton = e.target.querySelector("button[type=submit]");
-                submitButton.disabled = true;
-                submitButton.textContent = "Signing Up...";
             } catch (error) {
                 // Handle errors
                 console.error("Error during signup:", error);
@@ -463,9 +431,6 @@
                 // Re-enable the button
                 submitButton.disabled = false;
                 submitButton.textContent = "Sign Up Now";
-                
-                // Reset reCAPTCHA
-                grecaptcha.reset();
             }
         });
         
@@ -508,9 +473,6 @@
                 // Re-enable the button
                 submitButton.disabled = false;
                 submitButton.textContent = "Login";
-                
-                // Reset reCAPTCHA
-                grecaptcha.reset(1);
             }
         });
         
