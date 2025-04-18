@@ -309,8 +309,8 @@
                         Sign up now to start earning with Greenville Cash!
                     </div>
                     <div class="form-group">
-                        <label for="signup-name">Your Name</label>
-                        <input type="text" id="signup-name" placeholder="Enter your name" required>
+                        <label for="signup-username">Username</label>
+                        <input type="text" id="signup-username" placeholder="Choose a username" required>
                     </div>
                     <div class="form-group">
                         <label for="signup-email">Email Address</label>
@@ -382,7 +382,7 @@
         document.getElementById("signup-form").addEventListener("submit", async (e) => {
             e.preventDefault();
             
-            const nameInput = document.getElementById("signup-name");
+            const usernameInput = document.getElementById("signup-username");
             const emailInput = document.getElementById("signup-email");
             const passwordInput = document.getElementById("signup-password");
             const errorElement = document.getElementById("signup-error");
@@ -410,7 +410,7 @@
                 
                 // Store additional user data in Firestore
                 await setDoc(doc(db, "users", user.uid), {
-                    name: nameInput.value,
+                    username: usernameInput.value,
                     email: emailInput.value,
                     createdAt: new Date().toISOString(),
                     balance: 0,
