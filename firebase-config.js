@@ -1,35 +1,26 @@
 // Save this as firebase-config.js
 (function(){
-    // Heavily obfuscated Firebase configuration
-    var _0x4a82=['charCodeAt','map','fromCharCode','join','split'];
-    
-    function _0xd3c4(_0x4e08b1,_0x1f5e95){
-        return String[_0x4a82[2]](_0x4e08b1-_0x1f5e95);
+    // More reliable obfuscation that preserves the exact API key
+    function decode(str) {
+        return atob(str);
     }
     
-    function _0xf98c2(_0x3ae74f){
-        return _0x3ae74f[_0x4a82[4]]('')[_0x4a82[1]](function(_0x23f50a){
-            return _0x23f50a[_0x4a82[0]](0);
-        })[_0x4a82[1]](function(_0x1ce5d1){
-            return _0xd3c4(_0x1ce5d1,3);
-        })[_0x4a82[3]]('');
-    }
-    
-    var _0xenc1 = "DL}dv|FNS\\|Qht?UYul8YLj9XvGLrQheJDl2';";
-    var _0xenc2 = "gdwdedvh;0g6g<g1iluhedvhdss1frp";
-    var _0xenc3 = "gdwdedvh;0g6g<g";
-    var _0xenc4 = "gdwdedvh;0g6g<g1iluhedvhvwrudjh1dss";
-    var _0xenc5 = "z;3386962<z53";
-    var _0xenc6 = "4=z;3386962<z53=zhe=z377445i6587<88;g";
+    // Base64 encoded credentials
+    var _0xb64a = "QUl6YVN5Q1BLeVduWGVxVlJWcmlVM3FCa05KSV9lYklDem55ektJ"; // apiKey
+    var _0xb64b = "ZGF0YWJhc2U4LWQzZDlkLmZpcmViYXNlYXBwLmNvbQ=="; // authDomain
+    var _0xb64c = "ZGF0YWJhc2U4LWQzZDlk"; // projectId
+    var _0xb64d = "ZGF0YWJhc2U4LWQzZDlkLmZpcmViYXNlc3RvcmFnZS5hcHA="; // storageBucket
+    var _0xb64e = "NzgwMDUzNjI5NzIw"; // messagingSenderId
+    var _0xb64f = "MTo3ODAwNTM2Mjk3MjA6d2ViOjcwNDQxMTJmMzI0OTU1ODI2MDZjNmQ="; // appId
     
     window.initFirebase = function() {
         return {
-            apiKey: _0xf98c2(_0xenc1),
-            authDomain: _0xf98c2(_0xenc2),
-            projectId: _0xf98c2(_0xenc3),
-            storageBucket: _0xf98c2(_0xenc4),
-            messagingSenderId: _0xf98c2(_0xenc5),
-            appId: _0xf98c2(_0xenc6)
+            apiKey: decode(_0xb64a),
+            authDomain: decode(_0xb64b),
+            projectId: decode(_0xb64c),
+            storageBucket: decode(_0xb64d),
+            messagingSenderId: decode(_0xb64e),
+            appId: decode(_0xb64f)
         };
     };
 })();
