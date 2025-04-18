@@ -198,18 +198,49 @@
             transform: translateY(-2px);
         }
 
+        .auth-btn:disabled {
+            background: #888;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .error-message {
             color: #ff6b6b;
-            font-size: 0.9rem;
+            font-size: 1rem;
             margin-top: 1rem;
+            padding: 0.8rem;
+            background-color: rgba(255, 107, 107, 0.15);
+            border-radius: 6px;
+            border-left: 4px solid #ff6b6b;
+            font-weight: 500;
+            text-align: left;
             display: none;
         }
 
         .success-message {
             color: #2ecc71;
-            font-size: 0.9rem;
+            font-size: 1rem;
             margin-top: 1rem;
+            padding: 0.8rem;
+            background-color: rgba(46, 204, 113, 0.15);
+            border-radius: 6px;
+            border-left: 4px solid #2ecc71;
+            font-weight: 500;
+            text-align: left;
             display: none;
+        }
+
+        .info-message {
+            color: #3498db;
+            font-size: 1rem;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background-color: rgba(52, 152, 219, 0.15);
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+            font-weight: 500;
+            text-align: left;
+            display: block;
         }
 
         @keyframes fadeIn {
@@ -274,33 +305,39 @@
                 </div>
                 
                 <form class="auth-form active" id="signup-form">
+                    <div class="info-message">
+                        Sign-ups are temporarily disabled. Please check back soon!
+                    </div>
                     <div class="form-group">
                         <label for="signup-name">Your Name</label>
-                        <input type="text" id="signup-name" placeholder="Enter your name" required>
+                        <input type="text" id="signup-name" placeholder="Enter your name" required disabled>
                     </div>
                     <div class="form-group">
                         <label for="signup-email">Email Address</label>
-                        <input type="email" id="signup-email" placeholder="Enter your email" required>
+                        <input type="email" id="signup-email" placeholder="Enter your email" required disabled>
                     </div>
                     <div class="form-group">
                         <label for="signup-password">Password</label>
-                        <input type="password" id="signup-password" placeholder="Create a password" required minlength="6">
+                        <input type="password" id="signup-password" placeholder="Create a password" required minlength="6" disabled>
                     </div>
-                    <button type="submit" class="auth-btn">Sign Up for Updates</button>
+                    <button type="submit" class="auth-btn" disabled>Sign Up for Updates</button>
                     <div class="error-message" id="signup-error"></div>
                     <div class="success-message" id="signup-success"></div>
                 </form>
                 
                 <form class="auth-form" id="login-form">
+                    <div class="info-message">
+                        Login is temporarily disabled. Please check back soon!
+                    </div>
                     <div class="form-group">
                         <label for="login-email">Email Address</label>
-                        <input type="email" id="login-email" placeholder="Enter your email" required>
+                        <input type="email" id="login-email" placeholder="Enter your email" required disabled>
                     </div>
                     <div class="form-group">
                         <label for="login-password">Password</label>
-                        <input type="password" id="login-password" placeholder="Enter your password" required>
+                        <input type="password" id="login-password" placeholder="Enter your password" required disabled>
                     </div>
-                    <button type="submit" class="auth-btn">Login</button>
+                    <button type="submit" class="auth-btn" disabled>Login</button>
                     <div class="error-message" id="login-error"></div>
                     <div class="success-message" id="login-success"></div>
                 </form>
@@ -345,80 +382,7 @@
             }
         });
 
-        // Handle signup form submission
-        document.getElementById("signup-form").addEventListener("submit", async (event) => {
-            event.preventDefault();
-            
-            const name = document.getElementById("signup-name").value;
-            const email = document.getElementById("signup-email").value;
-            const password = document.getElementById("signup-password").value;
-            
-            const errorElement = document.getElementById("signup-error");
-            const successElement = document.getElementById("signup-success");
-            
-            errorElement.style.display = "none";
-            successElement.style.display = "none";
-            
-            try {
-                // Create user with email and password
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-                
-                // Add user data to Firestore
-                await setDoc(doc(db, "users", user.uid), {
-                    name: name,
-                    email: email,
-                    createdAt: new Date().toISOString()
-                });
-                
-                // Show success message with updated text
-                successElement.textContent = "Registered successfully!";
-                successElement.style.display = "block";
-                
-                // Clear form
-                document.getElementById("signup-form").reset();
-                
-            } catch (error) {
-                // Handle errors
-                errorElement.textContent = error.message;
-                errorElement.style.display = "block";
-                console.error("Error during signup:", error);
-            }
-        });
-        
-        // Handle login form submission
-        document.getElementById("login-form").addEventListener("submit", async (event) => {
-            event.preventDefault();
-            
-            const email = document.getElementById("login-email").value;
-            const password = document.getElementById("login-password").value;
-            
-            const errorElement = document.getElementById("login-error");
-            const successElement = document.getElementById("login-success");
-            
-            errorElement.style.display = "none";
-            successElement.style.display = "none";
-            
-            try {
-                // Sign in with email and password
-                await signInWithEmailAndPassword(auth, email, password);
-                
-                // Show success message
-                successElement.textContent = "Logged in successfully!";
-                successElement.style.display = "block";
-                
-                // Clear form
-                document.getElementById("login-form").reset();
-                
-                // You can redirect to a members area or show member content
-                
-            } catch (error) {
-                // Handle errors
-                errorElement.textContent = error.message;
-                errorElement.style.display = "block";
-                console.error("Error during login:", error);
-            }
-        });
+        // Form submission handlers are kept but won't be triggered due to disabled buttons
         
         // Tab switching functionality
         document.getElementById("signup-tab").addEventListener("click", () => {
