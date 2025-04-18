@@ -315,6 +315,9 @@
         </div>
     </div>
 
+    <!-- Firebase config script (external obfuscated file) -->
+    <script src="firebase-config.js"></script>
+
     <!-- Firebase SDK -->
     <script type="module">
         // Import the functions you need from the SDKs
@@ -322,15 +325,8 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
-        // Your Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCPKyWnXeqVRVriU3qBkNJI_ebICznyzKI", // Replace with your new API key
-            authDomain: "database8-d3d9d.firebaseapp.com",
-            projectId: "database8-d3d9d",
-            storageBucket: "database8-d3d9d.firebasestorage.app",
-            messagingSenderId: "780053629720",
-            appId: "1:780053629720:web:7044112f32495582606c6d"
-        };
+        // Get Firebase configuration from obfuscated file
+        const firebaseConfig = window.initFirebase();
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
