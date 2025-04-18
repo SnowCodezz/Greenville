@@ -243,6 +243,19 @@
             display: block;
         }
 
+        .maintenance-message {
+            color: #e74c3c;
+            font-size: 1rem;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background-color: rgba(231, 76, 60, 0.15);
+            border-radius: 6px;
+            border-left: 4px solid #e74c3c;
+            font-weight: 500;
+            text-align: left;
+            display: block;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -300,32 +313,31 @@
         <div class="auth-container">
             <div class="form-container">
                 <div class="auth-tabs">
-                    <button class="auth-tab active" id="signup-tab">Sign Up</button>
-                    <button class="auth-tab" id="login-tab">Login</button>
+                    <button class="auth-tab" id="signup-tab">Sign Up</button>
+                    <button class="auth-tab active" id="login-tab">Login</button>
                 </div>
                 
-                <form class="auth-form active" id="signup-form">
-                    <div class="info-message">
-                        Sign up now to start earning with Greenville Cash!
+                <form class="auth-form" id="signup-form">
+                    <div class="maintenance-message">
+                        New user registration is temporarily disabled for maintenance. Please try again later.
                     </div>
                     <div class="form-group">
                         <label for="signup-username">Username</label>
-                        <input type="text" id="signup-username" placeholder="Enter your username" required>
+                        <input type="text" id="signup-username" placeholder="Enter your username" disabled>
                     </div>
                     <div class="form-group">
                         <label for="signup-email">Email Address</label>
-                        <input type="email" id="signup-email" placeholder="Enter your email" required>
+                        <input type="email" id="signup-email" placeholder="Enter your email" disabled>
                     </div>
                     <div class="form-group">
                         <label for="signup-password">Password</label>
-                        <input type="password" id="signup-password" placeholder="Create a password" required minlength="6">
+                        <input type="password" id="signup-password" placeholder="Create a password" disabled>
                     </div>
-                    <button type="submit" class="auth-btn">Sign Up Now</button>
+                    <button type="submit" class="auth-btn" disabled>Sign Up Disabled</button>
                     <div class="error-message" id="signup-error"></div>
-                    <div class="success-message" id="signup-success"></div>
                 </form>
                 
-                <form class="auth-form" id="login-form">
+                <form class="auth-form active" id="login-form">
                     <div class="info-message">
                         Welcome back! Login to access your dashboard.
                     </div>
@@ -359,8 +371,56 @@
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+        // Add security layer to prevent tampering
+        (function() {
+            // Intercept and block any attempts to modify the DOM
+            const originalSetAttribute = Element.prototype.setAttribute;
+            Element.prototype.setAttribute = function(name, value) {
+                // Block any attempts to enable disabled inputs in signup form
+                if (this.form && this.form.id === 'signup-form' && name === 'disabled') {
+                    console.log('Modification blocked for security reasons');
+                    return;
+                }
+                // Allow other setAttribute calls
+                return originalSetAttribute.call(this, name, value);
+            };
+            
+            // Block removeAttribute for disabled properties
+            const originalRemoveAttribute = Element.prototype.removeAttribute;
+            Element.prototype.removeAttribute = function(name) {
+                if (this.form && this.form.id === 'signup-form' && name === 'disabled') {
+                    console.log('Modification blocked for security reasons');
+                    return;
+                }
+                return originalRemoveAttribute.call(this, name);
+            };
+            
+            // Monitor DOM mutations to prevent signup form modification
+            const observer = new MutationObserver((mutations) => {
+                for (const mutation of mutations) {
+                    if (mutation.target.id === 'signup-form' || 
+                        (mutation.target.form && mutation.target.form.id === 'signup-form')) {
+                        // Re-disable any inputs that might have been enabled
+                        const inputs = document.querySelectorAll('#signup-form input, #signup-form button');
+                        inputs.forEach(input => {
+                            input.disabled = true;
+                        });
+                    }
+                }
+            });
+            
+            // Start observing when DOM is loaded
+            document.addEventListener('DOMContentLoaded', () => {
+                observer.observe(document.body, { 
+                    attributes: true, 
+                    childList: true, 
+                    subtree: true 
+                });
+            });
+        })();
 
         // Get the Firebase configuration from window object
         const firebaseConfig = window.firebaseConfig;
@@ -378,77 +438,16 @@
             }
         });
 
-        // Sign up form submission handler
-        document.getElementById("signup-form").addEventListener("submit", async (e) => {
+        // Server-side security - any attempt to create a new user will be blocked
+        window.createUserIsDisabled = true;
+
+        // Completely remove the signup functionality
+        document.getElementById("signup-form").addEventListener("submit", (e) => {
             e.preventDefault();
-            
-            const usernameInput = document.getElementById("signup-username");
-            const emailInput = document.getElementById("signup-email");
-            const passwordInput = document.getElementById("signup-password");
             const errorElement = document.getElementById("signup-error");
-            const successElement = document.getElementById("signup-success");
-            
-            // Reset messages
-            errorElement.style.display = "none";
-            successElement.style.display = "none";
-            
-            // Disable the button during signup
-            const submitButton = e.target.querySelector("button[type=submit]");
-            submitButton.disabled = true;
-            submitButton.textContent = "Signing Up...";
-            
-            try {
-                // Check if username already exists
-                const username = usernameInput.value.trim();
-                
-                // Validate username (only alphanumeric characters)
-                if (!/^[a-zA-Z0-9]+$/.test(username)) {
-                    throw new Error("Username can only contain letters and numbers");
-                }
-                
-                // Check for username uniqueness
-                const usersRef = collection(db, "users");
-                const usernameQuery = query(usersRef, where("username", "==", username));
-                const usernameSnapshot = await getDocs(usernameQuery);
-                
-                if (!usernameSnapshot.empty) {
-                    throw new Error("Username already taken. Please choose another one.");
-                }
-                
-                // Create user with Firebase Auth
-                const userCredential = await createUserWithEmailAndPassword(
-                    auth, 
-                    emailInput.value, 
-                    passwordInput.value
-                );
-                
-                // Get the user
-                const user = userCredential.user;
-                
-                // Store additional user data in Firestore
-                await setDoc(doc(db, "users", user.uid), {
-                    username: username,
-                    email: emailInput.value,
-                    createdAt: new Date().toISOString(),
-                    balance: 0,
-                    farms: 0
-                });
-                
-                // Show success message
-                successElement.textContent = "Account created successfully! Redirecting to dashboard...";
-                successElement.style.display = "block";
-                
-                // Will be redirected by onAuthStateChanged
-            } catch (error) {
-                // Handle errors
-                console.error("Error during signup:", error);
-                errorElement.textContent = error.message;
-                errorElement.style.display = "block";
-                
-                // Re-enable the button
-                submitButton.disabled = false;
-                submitButton.textContent = "Sign Up Now";
-            }
+            errorElement.textContent = "New user registration is currently disabled.";
+            errorElement.style.display = "block";
+            return false;
         });
         
         // Login form submission handler
@@ -493,8 +492,13 @@
             }
         });
         
-        // Tab switching functionality
+        // Tab switching functionality - modified to prevent showing signup form as active by default
         document.getElementById("signup-tab").addEventListener("click", () => {
+            // Show a message that signup is disabled
+            const errorElement = document.getElementById("signup-error");
+            errorElement.textContent = "New user registration is currently disabled.";
+            errorElement.style.display = "block";
+            
             document.getElementById("signup-tab").classList.add("active");
             document.getElementById("login-tab").classList.remove("active");
             document.getElementById("signup-form").classList.add("active");
@@ -506,6 +510,17 @@
             document.getElementById("signup-tab").classList.remove("active");
             document.getElementById("login-form").classList.add("active");
             document.getElementById("signup-form").classList.remove("active");
+        });
+        
+        // Additional security to prevent form manipulation through console
+        Object.defineProperty(window, 'createUserWithEmailAndPassword', {
+            get: function() {
+                console.log('Attempt to access createUserWithEmailAndPassword blocked');
+                return function() {
+                    return Promise.reject(new Error("Registration is disabled"));
+                };
+            },
+            configurable: false
         });
     </script>
 </body>
