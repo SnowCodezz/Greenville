@@ -665,8 +665,9 @@
                 if (userSnap.exists()) {
                     const userData = userSnap.data();
                     
-                    // Update username display
-                    userNameElement.textContent = userData.username;
+                    // Update username display - show first 8 characters of UID for a cleaner look
+                    const shortUid = userData.username.substring(0, 8);
+                    userNameElement.textContent = shortUid;
                     
                     // Update balance display
                     balanceValueElement.textContent = `$${userData.balance.toFixed(2)}`;
