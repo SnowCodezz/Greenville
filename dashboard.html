@@ -503,7 +503,7 @@
             <h1 class="logo-text">Greenville Cash</h1>
         </div>
         <div class="user-nav">
-            <p class="user-welcome">Welcome, <span class="username" id="user-name">User</span>!</p>
+            <p class="user-welcome">Welcome <span class="username" id="user-username">User</span>!</p>
             <button class="logout-btn" id="logout-btn">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </button>
@@ -630,7 +630,7 @@
         const db = getFirestore(app);
 
         // Elements
-        const userNameElement = document.getElementById('user-name');
+        const userNameElement = document.getElementById('user-username');
         const balanceValueElement = document.getElementById('balance-value');
         const farmsValueElement = document.getElementById('farms-value');
         const dailyIncomeElement = document.getElementById('daily-income');
@@ -665,8 +665,8 @@
                 if (userSnap.exists()) {
                     const userData = userSnap.data();
                     
-                    // Update user name display
-                    userNameElement.textContent = userData.name;
+                    // Update username display
+                    userNameElement.textContent = userData.username;
                     
                     // Update balance display
                     balanceValueElement.textContent = `$${userData.balance.toFixed(2)}`;
